@@ -1,21 +1,27 @@
-{
-  "name": "copytrading-backend",
-  "version": "1.0.0",
-  "description": "MT5 Copy Trading Backend",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^8.0.3",
-    "dotenv": "^16.3.1",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "cors": "^2.8.5",
-    "metaapi.cloud-sdk": "^22.0.0"
-  },
-  "engines": {
-    "node": "18.x"
-  }
-}
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const MetaApi = require('metaapi.cloud-sdk').default;
+require('dotenv').config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const PORT = process.env.PORT || 3000;
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connected ✅'))
+  .catch(err => console.log('MongoDB error:', err));
+
+// Basic route
+app.get('/', (req, res) => {
+  res.send('Copy Trading API is running');
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
