@@ -1,0 +1,206 @@
+body {
+    
+}
+
+
+ <div class="card">
+    <h3>Subscription</h3>
+    <button onclick="subscribe()">Subscribe (R250/month)</button>
+    <p id="subStatus">Not Subscribed</p>
+  </div>
+
+
+<div class="card">
+  <h3>Connect MT5 Account</h3>
+  <input id="mt5Login" placeholder="MT5 Login">
+  <input id="mt5Password" type="password" placeholder="MT5 Password">
+  <input id="mt5Server" placeholder="Broker Server">
+  <button onclick="connectMT5()">Connect Account</button>
+</div>
+
+function subscribe(){
+  let user = auth.currentUser;
+
+  db.collection("users").doc(user.uid).set({
+    subscribed:true
+  });
+
+  subStatus.innerText = "Subscribed ✅";
+}
+async function connectMT5(){
+
+  const user = auth.currentUser;
+
+  const res = await fetch("http://localhost:3000/connect-account", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      uid: user.uid,
+      login: mt5Login.value,
+      password: mt5Password.value,
+      server: mt5Server.value
+    })
+  });
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="hidden">
+
+  <div class="card topbar">
+    <h2>Dashboard</h2>
+    <button <onclick="logout()">Logout</button>
+  </div>
+<div class="card">
+  <h3>Subscription</h3>
+  <p>Status: <span id="subStatus" class="status inactive">Inactive</span></p>
+  <button onclick="subscribe()">Activate (R250/month)</button>
+</div>
+ 
+  <div class="card">
+    <h3>Trade Signals</h3>
+    <div id="signals"></div>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="card">
+    <h3>Admin Panel</h3>
+    <input id="pair" placeholder="Pair (e.g. EURUSD)">
+    <input id="type" placeholder="BUY or SELL">
+    <input id="lot" placeholder="Lot Size">
+    <button onclick="sendSignal()">Send Trade</button>
+  </div>
+
+</div>
+
+</div>
+<div class="card">
+  <h3>MT5 Connection</h3>
+  <input id="mt5Login" placeholder="MT5 Login">
+  <input id="mt5Password" type="password" placeholder="Password">
+  <input id="mt5Server" placeholder="Broker Server">
+  <button onclick="connectMT5()">Connect Account</button>
+  <p id="mt5Status" class="status inactive">Not Connected</p>
+</div>
+<div class="card">
+  <h3>Profit Dashboard 📊</h3>
+
+  <div class="signal">
+    💰 Today Profit: <span id="todayProfit">$0</span>
+  </div>
+
+  <div class="signal">
+    📈 Total Profit: <span id="totalProfit">$0</span>
+  </div>
+
+  <div class="signal">
+    📉 Loss: <span id="totalLoss">$0</span>
+  </div>
+
+  <div class="signal">
+    📊 Win Rate: <span id="winRate">0%</span>
+  </div>
+</div>
+
+const MetaApi = require('metaapi.cloud-sdk').default;
+
+const token = "YOUR_META_API_TOKEN";
+const accountId = "MASTER_ACCOUNT_ID";
+
+const api = new MetaApi(token);
+
+async function run(){
+  const account = await" api.metatraderAccountApi.getAccount(accountId);
+  await account.deploy();
+  await account.waitConnected();
+
+  const connection = account.getRPCConnection();
+  await connection.connect();
+
+  // Listen for trades
+  connection.on('positions', async (positions) => {
+
+    positions.forEach(async (trade) => {
+
+      // 🔥 COPY TRADE TO USERS
+      let users = await getSubscribedUsers();
+
+      users.forEach(async (user) => {
+        let userConn = await connectUserAccount(user);
+
+        await userConn.createMarketBuyOrder(
+          trade.symbol,
+          trade.volume,
+          trade.stopLoss,
+          trade.takeProfit
+        );
+      });
+
+    });
+
+  });
+
+}
+
+run();
+
+connection.on('positionClosed', async (trade) => {
+
+  let users = await getSubscribedUsers();
+
+  users.forEach(async (user) => {
+    let userConn = await connectUserAccount(user);
+
+    let userTrade = findUserTrade(user, trade.id);
+
+    await userConn.closePosition(userTrade.id);
+  });
+
+});
+
+if(user.subscribed === true){
+   // allow copy
+}
+
+
+
+  const data = await res.json();
+  alert(data.message);
+}
+
+async function connectMT5(){
+
+  const res = await fetch("http://localhost:3000/connect-account", {
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      uid: auth.currentUser.uid,
+      login: mt5Login.value,
+      password: mt5Password.value,
+      server: mt5Server.value
+    })
+  });
+
+  const data = await res.json();
+
+  if(data.message.includes("Success")){
+    mt5Status.innerText = "Connected";
+    mt5Status.classList.remove("inactive");
+    mt5Status.classList.add("active");
+  } else {
+    alert(data.message);
+  }
+
+
+async function loadStats(){
+
+  const res = await fetch("http://localhost:3000/stats");
+  const data = await res.json();
+
+  todayProfit.innerText = "$" + data.profit;
+  totalProfit.innerText = "$" + data.profit;
+  totalLoss.innerText = "$" + data.loss;
+  winRate.innerText = data.winRate + "%";
+}
+
+setInterval(loadStats, 5000);
