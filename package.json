@@ -1,15 +1,21 @@
 {
-
-    "name": "copytrading",
-    "version": "1.0.0",
-    "script": {"start": "node server.js"},
-    "independencies": {
-        "express": "^4.18.2",
+  "name": "copytrading-backend",
+  "version": "1.0.0",
+  "description": "MT5 Copy Trading Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
     "cors": "^2.8.5",
-"mongoose": "^8.1.0",
-"metaapi.cloud-sdk": "^29.3.3",
-"dotenv": "^16.4.5",
-"jsonwebtoken": "^9.0.2",
-"bcryptjs": " ^2.4.3",
-    }
+    "metaapi.cloud-sdk": "^17.5.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
 }
