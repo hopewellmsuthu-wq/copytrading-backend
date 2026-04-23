@@ -1,7 +1,6 @@
 {
   "name": "copytrading-backend",
   "version": "1.0.0",
-  "description": "MT5 Copy Trading Backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -16,16 +15,3 @@
     "metaapi.cloud-sdk": "^22.0.0"
   }
 }
-
-{
-  "email": "hopewellmsuthu@gmail.com",
-  "password": "Sikhulu@1", 
-  "role": "master"
-}
-
-{
-  "email": "hopewellmsuthu@gmail.com", 
-  "password": "Sikhulu@1",
-  "role": "slave"
-}
-
