@@ -15,9 +15,6 @@
     "cors": "^2.8.5",
     "metaapi.cloud-sdk": "^22.0.0"
   },
-  "engines": {
-    "node": "18"
-  }
 }
 
 
