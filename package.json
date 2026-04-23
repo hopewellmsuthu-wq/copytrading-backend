@@ -19,3 +19,16 @@
     "node": "18.x"
   }
 }
+
+
+{
+  "email": "hopewellmsuthu@gmail.com",
+  "password": "Sikhulu@1",
+  "role": "master"
+}
+
+{
+  "email": "hopewellmsuthu@gmail.com", 
+  "password": "Sikhulu@1",
+  "role": "slave"
+}
