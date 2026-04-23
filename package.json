@@ -14,18 +14,5 @@
     "jsonwebtoken": "^9.0.2",
     "cors": "^2.8.5",
     "metaapi.cloud-sdk": "^22.0.0"
-  },
-}
-
-
-{
-  "email": "hopewellmsuthu@gmail.com",
-  "password": "Sikhulu@1",
-  "role": "master"
-}
-
-{
-  "email": "hopewellmsuthu@gmail.com", 
-  "password": "Sikhulu@1",
-  "role": "slave"
+  }
 }
