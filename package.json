@@ -16,3 +16,16 @@
     "metaapi.cloud-sdk": "^22.0.0"
   }
 }
+POST /api/register
+{
+  "email": "hopewellmsuthu@gmail.com",
+  "password": "Sikhulu@1", 
+  "role": "master"
+}
+
+{
+  "email": "hopewellmsuthu@gmail.com", 
+  "password": "Sikhulu@1",
+  "role": "slave"
+}
+
