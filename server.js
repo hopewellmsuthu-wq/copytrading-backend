@@ -24,6 +24,16 @@ const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const AccountSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  accountId: String,
+  password: String,
+  server: String,
+  name: String,
+  type: { type: String, enum: ['master', 'slave'] }
+});
+const Account = mongoose.model('Account', AccountSchema);
+
 const User = mongoose.model('User', UserSchema);
 
 app.get('/', (req, res) => {
@@ -79,6 +89,29 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+app.post('/api/connect-account', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'No token' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { accountId, password, server, name, type = 'slave' } = req.body;
+
+    const account = new Account({
+      userId: decoded.userId,
+      accountId,
+      password,
+      server,
+      name,
+      type
+    });
+
+    await account.save();
+    res.json({ message: 'Account connected successfully', account });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
