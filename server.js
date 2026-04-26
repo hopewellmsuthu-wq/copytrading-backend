@@ -112,6 +112,9 @@ app.post('/api/connect-account', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+app.get('/', (req, res) => {
+  res.send('CopyBot API is alive ✅');
+});
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
